@@ -8,7 +8,7 @@ import threading
 from datetime import datetime, timezone
 from typing import Any, List, Optional
 
-from autourgos_memory import BaseMemory, MemoryMessage
+from .base import BaseMemory, MemoryMessage
 
 logger = logging.getLogger(__name__)
 
