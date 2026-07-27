@@ -1,0 +1,38 @@
+"""Smoke tests for SummaryBufferedMemory."""
+from autourgos_summary_memory import SummaryBufferedMemory
+
+
+def test_add_and_get_messages_normal():
+    mem = SummaryBufferedMemory(max_messages=10)
+    mem.add_user_message("hello")
+    mem.add_agent_message("hi there")
+    msgs = mem.get_messages()
+    assert [m.content for m in msgs] == ["hello", "hi there"]
+
+
+def test_overflow_triggers_summary_without_llm():
+    mem = SummaryBufferedMemory(max_messages=2)
+    mem.add_user_message("a")
+    mem.add_user_message("b")
+    mem.add_user_message("c")
+    msgs = mem.get_messages()
+    assert [m.content for m in msgs] == ["b", "c"]
+    assert "a" in mem.moving_summary
+
+
+def test_clear_resets_messages_and_summary():
+    mem = SummaryBufferedMemory(max_messages=1)
+    mem.add_user_message("a")
+    mem.add_user_message("b")
+    mem.clear()
+    assert mem.get_messages() == []
+    assert mem.moving_summary == ""
+
+
+def test_format_for_llm_includes_summary_and_recent():
+    mem = SummaryBufferedMemory(max_messages=1)
+    mem.add_user_message("a")
+    mem.add_user_message("b")
+    text = mem.format_for_llm()
+    assert "Summary of Past Conversation" in text
+    assert "Recent Conversation Context" in text

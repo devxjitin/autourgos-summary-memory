@@ -9,6 +9,6 @@ try:
     from importlib.metadata import version as _v
     __version__ = _v("autourgos-summary-memory")
 except Exception:
-    __version__ = "1.0.2"
+    __version__ = "2.0.0"
 
 __all__ = ["SummaryBufferedMemory"]

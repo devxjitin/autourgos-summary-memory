@@ -22,7 +22,8 @@ from autourgos_openaichat import OpenAIChatModel
 from autourgos_react_agent import ReactAgent
 
 # Use a cheap model for summarization
-summarizer_llm = OpenAIChatModel(model="gpt-4o-mini")
+summarizer_llm = OpenAIChatModel(model="gpt-4o-mini")  # needs OPENAI_API_KEY set
+my_llm = summarizer_llm  # or any other chat-model instance for the main agent
 
 memory = SummaryBufferedMemory(
     llm=summarizer_llm,
