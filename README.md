@@ -19,7 +19,7 @@ pip install autourgos-summary-memory
 ```python
 from autourgos_summary_memory import SummaryBufferedMemory
 from autourgos_openaichat import OpenAIChatModel
-from autourgos_react_agent import ReactAgent
+from autourgos_agent import Agent
 
 # Use a cheap model for summarization
 summarizer_llm = OpenAIChatModel(model="gpt-4o-mini")  # needs OPENAI_API_KEY set
@@ -29,7 +29,7 @@ memory = SummaryBufferedMemory(
     llm=summarizer_llm,
     max_messages=10,   # keep last 10 messages in full; compress the rest
 )
-agent = ReactAgent(llm=my_llm, memory=memory)
+agent = Agent(llm=my_llm, memory=memory)
 agent.invoke("Start a long research task...")
 ```
 
