@@ -69,7 +69,17 @@ class SummaryBufferedMemory(BaseMemory):
                 summary = response.get("response", response.get("content", ""))
             else:
                 summary = response
-            self.moving_summary = str(summary).strip()
+            if summary is None:
+                # str(None) == "None" -- without this check, an LLM
+                # returning None (e.g. a misbehaving wrapper, or a mocked
+                # LLM in tests) permanently baked the literal string "None"
+                # into the summary instead of falling back like any other
+                # unusable response.
+                raise ValueError("llm.invoke() returned None")
+            stripped = str(summary).strip()
+            if not stripped:
+                raise ValueError("llm.invoke() returned an empty summary")
+            self.moving_summary = stripped
         except Exception as exc:
             logger.warning("Summary compression failed: %s. Falling back to raw concatenation.", exc)
             lines = [f"[{m.role}]: {m.content}" for m in to_summarize]

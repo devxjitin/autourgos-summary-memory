@@ -2,6 +2,18 @@
 from autourgos_summary_memory import SummaryBufferedMemory
 
 
+class _NoneLLM:
+    """Simulates a misbehaving/mocked LLM wrapper that returns None."""
+
+    def invoke(self, prompt):
+        return None
+
+
+class _EmptyLLM:
+    def invoke(self, prompt):
+        return "   "
+
+
 def test_add_and_get_messages_normal():
     mem = SummaryBufferedMemory(max_messages=10)
     mem.add_user_message("hello")
@@ -17,6 +29,29 @@ def test_overflow_triggers_summary_without_llm():
     mem.add_user_message("c")
     msgs = mem.get_messages()
     assert [m.content for m in msgs] == ["b", "c"]
+    assert "a" in mem.moving_summary
+
+
+def test_llm_returning_none_falls_back_instead_of_baking_in_the_string_none():
+    """str(None) == 'None' -- an LLM returning None used to permanently
+    bake the literal string "None" into moving_summary instead of falling
+    back to raw concatenation like any other unusable/failed response."""
+    mem = SummaryBufferedMemory(max_messages=2, llm=_NoneLLM())
+    mem.add_user_message("a")
+    mem.add_user_message("b")
+    mem.add_user_message("c")
+
+    assert mem.moving_summary != "None"
+    assert "a" in mem.moving_summary
+
+
+def test_llm_returning_empty_string_falls_back_instead_of_wiping_summary():
+    mem = SummaryBufferedMemory(max_messages=2, llm=_EmptyLLM())
+    mem.add_user_message("a")
+    mem.add_user_message("b")
+    mem.add_user_message("c")
+
+    assert mem.moving_summary.strip() != ""
     assert "a" in mem.moving_summary
 
 
