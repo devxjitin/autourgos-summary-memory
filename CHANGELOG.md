@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.3] - 2026-09-01
+
+- Fixed: `_update_summary()` used to bake the literal string `"None"` into
+  `moving_summary` permanently if `llm.invoke()` returned `None` (or an
+  empty string) — `str(None) == "None"`. Now falls back to raw
+  concatenation on a `None`/empty response, same as any other
+  unusable/failed response.
+
 ## [2.0.1] - 2026-07-27
 
 - Docs: fixed the undefined my_llm placeholder in the Quick Start example.
