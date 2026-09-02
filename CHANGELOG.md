@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.4] - 2026-09-01
+
+- Metadata: added `maintainers` (Sonia, Vishwanil Suman) to `pyproject.toml`,
+  and linked the README's existing Sonia contributor badge to her GitHub
+  profile (https://github.com/dahiyasonia). No code changes.
+
 ## [2.0.3] - 2026-09-01
 
 - Fixed: `_update_summary()` used to bake the literal string `"None"` into
