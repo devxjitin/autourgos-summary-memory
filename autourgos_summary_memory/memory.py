@@ -96,15 +96,6 @@ class SummaryBufferedMemory(BaseMemory):
                 self._update_summary(overflow)
             return msg
 
-    def add_user_message(self, content: str) -> MemoryMessage:
-        return self.add_message("user", content)
-
-    def add_agent_message(self, content: str) -> MemoryMessage:
-        return self.add_message("agent", content)
-
-    def add_tool_message(self, tool_name: str, result: str) -> MemoryMessage:
-        return self.add_message("tool", f"[{tool_name} returned]: {result}")
-
     def get_messages(self) -> List[MemoryMessage]:
         with self._lock:
             return list(self._messages)

@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.1.0] - 2026-09-05
+
+- Added: `SummaryBufferedMemory.add_system_message()` (new — inherited from `autourgos-memory`'s `BaseMemory` default, didn't exist before).
+- Internal: removed duplicated `add_user_message`/`add_agent_message`/`add_tool_message` one-liners, now inherited from `autourgos-memory`'s shared `add_message`-based defaults. Requires `autourgos-memory>=1.2.0`. No output change.
+
 ## [2.0.6] - 2026-09-04
 
 - Internal: `__version__` resolution moved to `autourgos_core.package_version()` (new `autourgos-core>=0.3.0` dependency). No functional change.

@@ -22,6 +22,14 @@ def test_add_and_get_messages_normal():
     assert [m.content for m in msgs] == ["hello", "hi there"]
 
 
+def test_add_system_message():
+    mem = SummaryBufferedMemory(max_messages=10)
+    msg = mem.add_system_message("policy note")
+    assert msg.role == "system"
+    assert msg.content == "policy note"
+    assert [m.role for m in mem.get_messages()] == ["system"]
+
+
 def test_overflow_triggers_summary_without_llm():
     mem = SummaryBufferedMemory(max_messages=2)
     mem.add_user_message("a")
