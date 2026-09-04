@@ -5,10 +5,8 @@ autourgos-summary-memory — LLM-compressed rolling summary memory for Autourgos
 """
 from .memory import SummaryBufferedMemory
 
-try:
-    from importlib.metadata import version as _v
-    __version__ = _v("autourgos-summary-memory")
-except Exception:
-    __version__ = "2.0.5"
+from autourgos_core import package_version
+
+__version__ = package_version("autourgos-summary-memory", fallback="2.0.6")
 
 __all__ = ["SummaryBufferedMemory"]
